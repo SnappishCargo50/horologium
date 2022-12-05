@@ -20,7 +20,6 @@ public class RigidbodyCharacter : MonoBehaviour
     }
 void OnCollisionEnter(Collision collision)
 {
-    Debug.Log("Entered");
     if (collision.gameObject.CompareTag("Ground"))
     {
         _isGrounded = true;
@@ -29,7 +28,6 @@ void OnCollisionEnter(Collision collision)
 
 void OnCollisionExit(Collision collision)
 {
-    Debug.Log("Exited");
     if (collision.gameObject.CompareTag("Ground"))
     {
         _isGrounded = false;
