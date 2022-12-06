@@ -6,7 +6,7 @@ public class RigidbodyCharacter : MonoBehaviour
 {
 
     public float Speed = 10f;
-    public float JumpHeight = 4f;
+    public float JumpHeight = 40f;
     public float GroundDistance = 0.0f;
     public LayerMask Ground;
 
@@ -51,6 +51,7 @@ void OnCollisionExit(Collision collision)
     void FixedUpdate()
     {
         _body.MovePosition(_body.position + _inputs * Speed * Time.fixedDeltaTime);
+        _body.AddForce(new Vector3(0, -1.0f, 0)*_body.mass*50f);  
     }
 }
 
