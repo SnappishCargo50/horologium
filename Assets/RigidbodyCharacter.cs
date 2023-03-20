@@ -23,6 +23,7 @@ void OnCollisionEnter(Collision collision)
     if (collision.gameObject.CompareTag("Ground"))
     {
         _isGrounded = true;
+        Debug.Log("On Ground");
     }
 }
 
@@ -31,6 +32,7 @@ void OnCollisionExit(Collision collision)
     if (collision.gameObject.CompareTag("Ground"))
     {
         _isGrounded = false;
+        Debug.Log("Off Ground");
     }
 }
 

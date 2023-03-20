@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Detection : MonoBehaviour
 {
-    private McImage1 McProfile1
 
 void OnCollisionEnter(Collision collision)
 {
@@ -15,9 +14,9 @@ void OnCollisionEnter(Collision collision)
         
     }
     //Friendly
-    if (collision.gameObject.CompareTag("Vendo1"))
+    if (collision.gameObject.CompareTag("Vendor1"))
     {
-        Debug.Log("Vendo1 Collided");
+        Debug.Log("Vendor1 Collided");
     }
 }
 
@@ -29,9 +28,9 @@ void OnCollisionExit(Collision collision)
         Debug.Log("Enemy Un-Collided");
     }
     //Friendly
-        if (collision.gameObject.CompareTag("Friend"))
+        if (collision.gameObject.CompareTag("Vendor1"))
     {
-        Debug.Log("Friend Un-Collided");
+        Debug.Log("Vendor Un-collided");
     }
 }
 }
