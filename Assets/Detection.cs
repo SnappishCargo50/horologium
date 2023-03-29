@@ -18,6 +18,11 @@ void OnCollisionEnter(Collision collision)
     {
         Debug.Log("Vendor1 Collided");
     }
+        if (collision.gameObject.CompareTag("Restart"))
+    {
+        Debug.Log("Teleporting...");
+        transform.position = new Vector3(-35, 4, 3);
+    }
 }
 
 void OnCollisionExit(Collision collision)
@@ -31,6 +36,10 @@ void OnCollisionExit(Collision collision)
         if (collision.gameObject.CompareTag("Vendor1"))
     {
         Debug.Log("Vendor Un-collided");
+    }
+        if (collision.gameObject.CompareTag("Restart"))
+    {
+        Debug.Log("Teleported");
     }
 }
 }

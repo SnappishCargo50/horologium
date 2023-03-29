@@ -13,6 +13,7 @@ public class RigidbodyCharacter : MonoBehaviour
     private Rigidbody _body;
     private Vector3 _inputs = Vector3.zero;
     private bool _isGrounded = true;
+    
 
     void Start()
     {
@@ -48,7 +49,6 @@ void OnCollisionExit(Collision collision)
             _body.AddForce(Vector3.up * Mathf.Sqrt(JumpHeight * -2f * Physics.gravity.y), ForceMode.VelocityChange);
         }
     }
-
 
     void FixedUpdate()
     {
