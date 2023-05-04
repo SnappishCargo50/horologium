@@ -1,3 +1,3 @@
 # Horologium
 
-This is the Main Repository for the Horologium game.
+This is the Beta for the Horologium game.
