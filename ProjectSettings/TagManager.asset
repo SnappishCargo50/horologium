@@ -9,6 +9,7 @@ TagManager:
   - Friend
   - Vendor1
   - Restart
+  - Wall
   layers:
   - Default
   - TransparentFX
