@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour
     public float maxSpeed = 50f;
     public float jumpForce = 60f;
     private bool isGrounded = false;
+    public bool menu_Begin = false;
     private Rigidbody2D rb;
 
     void Start()
@@ -47,8 +48,14 @@ public class PlayerController : MonoBehaviour
         {
             transform.localScale = new Vector3(1, 1, 1);
         }
+        // Excutes Begining
+        if(Input.GetKeyDown(KeyCode.E) & menu_Begin == true){
+            transform.position = new Vector3(-35, -120, 3);
+            Debug.Log("Teleporting to LV. 1");
+        }
     }
 
+        /* CHECKS ALL TRIGGERS AND COLLISIONS */
     void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Ground"))
@@ -56,4 +63,27 @@ public class PlayerController : MonoBehaviour
             isGrounded = true;
         }
     }
+    /* Trigger Enter */
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        /* Main Menu Options */
+        //Begin
+        if (other.tag == "Begin-Menu")
+        {
+            menu_Begin = true;
+            Debug.Log(menu_Begin);
+        }
+    }
+    /* Trigger Exit */
+        void OnTriggerExit2D(Collider2D other)
+    {
+        /* Main Menu Options */
+        //Begin
+        if (other.tag =="Begin-Menu")
+        {
+            menu_Begin = false;
+            Debug.Log(menu_Begin);
+        }
+    }
+
 }
