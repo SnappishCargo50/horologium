@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
     public float jumpForce = 60f;
     private bool isGrounded = false;
     public bool menu_Begin = false;
+    public bool menu_Quit = false;
     private Rigidbody2D rb;
 
     void Start()
@@ -50,8 +51,14 @@ public class PlayerController : MonoBehaviour
         }
         // Excutes Begining
         if(Input.GetKeyDown(KeyCode.E) & menu_Begin == true){
-            transform.position = new Vector3(-35, -120, 3);
+            transform.position = new Vector3(-34, -107, 3);
             Debug.Log("Teleporting to LV. 1");
+        }
+
+        //Exits Game
+        if(Input.GetKeyDown(KeyCode.E) & menu_Quit == true){
+            Debug.Log("Quitting Game");
+            Application.Quit();
         }
     }
 
@@ -72,6 +79,12 @@ public class PlayerController : MonoBehaviour
         {
             menu_Begin = true;
             Debug.Log(menu_Begin);
+        }
+        //Quit
+        if (other.tag == "Quit_Menu")
+        {
+            menu_Quit = true;
+            Debug.Log(menu_Quit);
         }
     }
     /* Trigger Exit */

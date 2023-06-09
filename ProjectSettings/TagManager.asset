@@ -12,6 +12,7 @@ TagManager:
   - Wall
   - Begin-Menu
   - Ground-NJ
+  - Quit_Menu
   layers:
   - Default
   - TransparentFX
