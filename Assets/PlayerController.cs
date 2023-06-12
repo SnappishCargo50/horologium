@@ -1,12 +1,11 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public float moveSpeed = 30f;
-    public float maxSpeed = 50f;
-    public float jumpForce = 60f;
+    public float moveSpeed = 20f;
+    public float maxSpeed = 60f;
+    public float jumpForce = 80f;
     private bool isGrounded = false;
     public bool menu_Begin = false;
     public bool menu_Quit = false;
@@ -31,8 +30,20 @@ public class PlayerController : MonoBehaviour
         /* Sprint */
         if (Input.GetKeyDown(KeyCode.LeftControl)){
             Debug.Log("Sprinting!");
-            moveSpeed = 30f;
-            return;
+            Debug.Log("Velocity before: " + rb.velocity);
+            maxSpeed = 80f;
+            rb.AddForce(new Vector2(20, 0));
+            Debug.Log("Velocity after: " + rb.velocity);
+        }
+        else {
+            maxSpeed = 60f;
+        }
+        /* Menu */
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            transform.position = new Vector3(-66, 34, -117);
+            isGrounded = false;
+            Debug.Log("Teleporting to Menu");
         }
         /* Checks if Character Grounded and Jumps */
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
