@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
     private bool isGrounded = false;
     public bool menu_Begin = false;
     public bool menu_Quit = false;
+    public bool sand_Splash_C = false;
     private Rigidbody2D rb;
 
     void Start()
@@ -18,6 +19,9 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        //Update Variables
+        GameObject sandSplashObject = GameObject.FindWithTag("Sand_Splash");
+
         float horizontalInput = Input.GetAxis("Horizontal");
         /* Horizontal Movement */
         Vector2 moveDirection = new Vector2(horizontalInput, 0);
@@ -43,6 +47,7 @@ public class PlayerController : MonoBehaviour
         {
             transform.position = new Vector3(-66, 34, -117);
             isGrounded = false;
+            sand_Splash_C = false;
             Debug.Log("Teleporting to Menu");
         }
         /* Checks if Character Grounded and Jumps */
@@ -60,10 +65,18 @@ public class PlayerController : MonoBehaviour
         {
             transform.localScale = new Vector3(1, 1, 1);
         }
+        /* Makes Splash Levels Appear */
+        if ( sand_Splash_C == true){
+            sandSplashObject.transform.localScale = new Vector3(4, 3, 1);
+        }
+        else{
+            sandSplashObject.transform.localScale = new Vector3(0, 0, 0);
+        }
         // Excutes Begining
         if(Input.GetKeyDown(KeyCode.E) & menu_Begin == true){
             transform.position = new Vector3(-34, -107, 3);
             Debug.Log("Teleporting to LV. 1");
+            sand_Splash_C = true;
         }
 
         //Exits Game
