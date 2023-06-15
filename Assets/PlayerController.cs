@@ -3,13 +3,14 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public float moveSpeed = 20f;
-    public float maxSpeed = 60f;
-    public float jumpForce = 80f;
+    public float moveSpeed = 80f;
+    public float maxSpeed = 100f;
+    public float jumpForce = 60f;
     private bool isGrounded = false;
     public bool menu_Begin = false;
     public bool menu_Quit = false;
     public bool sand_Splash_C = false;
+    public bool light_Overlay1_C = false;
     private Rigidbody2D rb;
 
     void Start()
@@ -21,6 +22,7 @@ public class PlayerController : MonoBehaviour
     {
         //Update Variables
         GameObject sandSplashObject = GameObject.FindWithTag("Sand_Splash");
+        GameObject lightOverlay1 = GameObject.FindWithTag("Light-Overlay1");
 
         float horizontalInput = Input.GetAxis("Horizontal");
         /* Horizontal Movement */
@@ -31,7 +33,7 @@ public class PlayerController : MonoBehaviour
         {
             rb.velocity = Vector2.ClampMagnitude(rb.velocity, maxSpeed);
         }
-        /* Sprint */
+        /* Sprint 
         if (Input.GetKeyDown(KeyCode.LeftControl)){
             Debug.Log("Sprinting!");
             Debug.Log("Velocity before: " + rb.velocity);
@@ -41,13 +43,14 @@ public class PlayerController : MonoBehaviour
         }
         else {
             maxSpeed = 60f;
-        }
+        } */
         /* Menu */
         if(Input.GetKeyDown(KeyCode.Escape))
         {
             transform.position = new Vector3(-66, 34, -117);
             isGrounded = false;
             sand_Splash_C = false;
+            light_Overlay1_C = false;
             Debug.Log("Teleporting to Menu");
         }
         /* Checks if Character Grounded and Jumps */
@@ -72,11 +75,19 @@ public class PlayerController : MonoBehaviour
         else{
             sandSplashObject.transform.localScale = new Vector3(0, 0, 0);
         }
+        /* Makes Light Overlay 1 Appear */
+        if ( light_Overlay1_C == true){
+            lightOverlay1.transform.localScale = new Vector3(120,110, 100);
+        }
+        else{
+            lightOverlay1.transform.localScale = new Vector3(0, 0, 0);
+        }
         // Excutes Begining
         if(Input.GetKeyDown(KeyCode.E) & menu_Begin == true){
             transform.position = new Vector3(-34, -107, 3);
             Debug.Log("Teleporting to LV. 1");
             sand_Splash_C = true;
+            light_Overlay1_C = true;
         }
 
         //Exits Game
