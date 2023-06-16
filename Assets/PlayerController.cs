@@ -3,9 +3,10 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public float moveSpeed = 80f;
-    public float maxSpeed = 100f;
-    public float jumpForce = 60f;
+    public float moveSpeed = 100f;
+    public float maxSpeed = 70f;
+    public float jumpForce = 90f;
+    public float bounceForce = 60f;
     private bool isGrounded = false;
     public bool menu_Begin = false;
     public bool menu_Quit = false;
@@ -16,6 +17,12 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        /* Set the player's spawn origin */
+        transform.position = new Vector3(-65.5999985f, 34.4799995f, -117.510002f);
+        moveSpeed = 100f;
+        maxSpeed = 70f;
+        jumpForce = 90f;
+        bounceForce = 60f;
     }
 
     void Update()
@@ -33,17 +40,21 @@ public class PlayerController : MonoBehaviour
         {
             rb.velocity = Vector2.ClampMagnitude(rb.velocity, maxSpeed);
         }
-        /* Sprint 
-        if (Input.GetKeyDown(KeyCode.LeftControl)){
+        // Sprint
+        if (Input.GetKey(KeyCode.LeftControl))
+        {
             Debug.Log("Sprinting!");
-            Debug.Log("Velocity before: " + rb.velocity);
-            maxSpeed = 80f;
-            rb.AddForce(new Vector2(20, 0));
-            Debug.Log("Velocity after: " + rb.velocity);
+            Debug.Log("Velocity before: " + rb.velocity +" " + maxSpeed);
+            maxSpeed = 85f;
+            var speedFactor = (maxSpeed - rb.velocity.magnitude) / maxSpeed;
+            rb.AddForce(moveDirection * speedFactor * 5 * Vector2.right, ForceMode2D.Impulse);
+            Debug.Log("Velocity after: " + rb.velocity + " " + maxSpeed);
+            maxSpeed = 85f;
         }
-        else {
-            maxSpeed = 60f;
-        } */
+        else 
+        {
+            maxSpeed = 70f;
+        }
         /* Menu */
         if(Input.GetKeyDown(KeyCode.Escape))
         {
@@ -95,43 +106,77 @@ public class PlayerController : MonoBehaviour
             Debug.Log("Quitting Game");
             Application.Quit();
         }
+
+       // Snap the position to the nearest pixel
+       transform.position = SnapToPixel(transform.position); 
     }
 
-        /* CHECKS ALL TRIGGERS AND COLLISIONS */
+    // A method that snaps a vector to the nearest pixel
+    private Vector2 SnapToPixel(Vector2 position)
+    {
+       // Get the pixels per unit of the sprite renderer
+       SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
+       float pixelsPerUnit = spriteRenderer.sprite.pixelsPerUnit;
+
+       // Round the position to the nearest pixel
+       float x = Mathf.Round(position.x * pixelsPerUnit) / pixelsPerUnit;
+       float y = Mathf.Round(position.y * pixelsPerUnit) / pixelsPerUnit;
+
+       // Return the snapped position
+       return new Vector2(x,y);
+    }
+
+    /* CHECKS ALL TRIGGERS AND COLLISIONS */
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Ground"))
-        {
-            isGrounded = true;
-        }
+      if (collision.gameObject.CompareTag("Ground"))
+      {
+          isGrounded = true;
+      }
+
+    if (collision.gameObject.CompareTag("Bounce-Off"))
+    {
+        Debug.Log("Bouncing...");
+        // Calculate the bounce direction
+        Vector2 bounceDirection = transform.position - collision.transform.position;
+        bounceDirection = bounceDirection.normalized;
+        // Apply the bounce force
+        rb.AddForce(bounceDirection * bounceForce + Vector2.down * bounceForce, ForceMode2D.Impulse);
+        Debug.Log("Bounced!");
+    }
     }
     /* Trigger Enter */
     void OnTriggerEnter2D(Collider2D other)
+    {
+      /* Main Menu Options */
+      //Begin
+      if (other.tag == "Begin-Menu")
+      {
+          menu_Begin = true;
+          Debug.Log(menu_Begin);
+      }
+      //Quit
+      if (other.tag == "Quit_Menu")
+      {
+          menu_Quit = true;
+          Debug.Log(menu_Quit);
+      }
+    }
+    /* Trigger Exit */
+    void OnTriggerExit2D(Collider2D other)
     {
         /* Main Menu Options */
         //Begin
         if (other.tag == "Begin-Menu")
         {
-            menu_Begin = true;
+            menu_Begin = false;
             Debug.Log(menu_Begin);
         }
         //Quit
         if (other.tag == "Quit_Menu")
         {
-            menu_Quit = true;
+            menu_Quit = false;
             Debug.Log(menu_Quit);
         }
     }
-    /* Trigger Exit */
-        void OnTriggerExit2D(Collider2D other)
-    {
-        /* Main Menu Options */
-        //Begin
-        if (other.tag =="Begin-Menu")
-        {
-            menu_Begin = false;
-            Debug.Log(menu_Begin);
-        }
-    }
-
 }

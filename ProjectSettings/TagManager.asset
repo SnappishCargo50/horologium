@@ -15,6 +15,7 @@ TagManager:
   - Quit_Menu
   - Sand_Splash
   - Light-Overlay1
+  - Bounce-Off
   layers:
   - Default
   - TransparentFX
