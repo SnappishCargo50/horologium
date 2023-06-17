@@ -9,6 +9,13 @@ TagManager:
   - Friend
   - Vendor1
   - Restart
+  - Wall
+  - Begin-Menu
+  - Ground-NJ
+  - Quit_Menu
+  - Sand_Splash
+  - Light-Overlay1
+  - Bounce-Off
   layers:
   - Default
   - TransparentFX
