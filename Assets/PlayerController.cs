@@ -10,14 +10,19 @@ public class PlayerController : MonoBehaviour
     private float timeSinceLastSpriteChange = 0f;
     public float spriteChangeInterval = 0.4f;
     private bool isGrounded = false;
+    private bool isGroundedNJ = true;
     public bool menu_Begin = false;
     public bool menu_Quit = false;
     public bool sand_Splash_C = false;
     public bool light_Overlay1_C = false;
     private bool usingSprite1 = true;
+    public GameObject sandSplashObject;
+    public GameObject lightOverlay1;
+    public GameObject idleClouds1;
     public Sprite Run1; // Running Sprite 1
-    public Sprite Run2; // Running Sprite
+    public Sprite Run2; // Running Sprite 2
     public Sprite Default_Idle; // Default Sprite
+    public Sprite Jump; // Jump Sprite
     private SpriteRenderer spriteRenderer;
     private Rigidbody2D rb;
 
@@ -32,14 +37,16 @@ public class PlayerController : MonoBehaviour
         jumpForce = 90f;
         bounceForce = 60f;
         spriteRenderer.sprite = Default_Idle;
+        //Update Variables
+        GameObject sandSplashObject = GameObject.FindWithTag("Sand_Splash");
+        GameObject lightOverlay1 = GameObject.FindWithTag("Light-Overlay1");
+        GameObject idleClouds1 = GameObject.FindWithTag("Idle-Clouds1");
+        lightOverlay1.transform.localScale = new Vector3(0, 0, 0);
+        sandSplashObject.transform.localScale = new Vector3(0, 0, 0);
     }
 
     void Update()
     {
-        //Update Variables
-        GameObject sandSplashObject = GameObject.FindWithTag("Sand_Splash");
-        GameObject lightOverlay1 = GameObject.FindWithTag("Light-Overlay1");
-
         //Movement And Controls
         /* Horizontal Movement */
         float horizontalInput = Input.GetAxis("Horizontal");
@@ -53,14 +60,11 @@ public class PlayerController : MonoBehaviour
         // Sprint
         if (Input.GetKey(KeyCode.LeftControl))
         {
-            Debug.Log("Sprinting!");
             jumpForce = 110f;
-            Debug.Log("Velocity before: " + rb.velocity +" Max speed: " + maxSpeed);
             maxSpeed = 55f;
             spriteChangeInterval = 0.2f;
             var speedFactor = (maxSpeed - rb.velocity.magnitude) / maxSpeed;
             rb.AddForce(moveDirection * speedFactor * 5 * Vector2.right, ForceMode2D.Impulse);
-            Debug.Log("Velocity after: " + rb.velocity + " Max speed: " + maxSpeed);
         }
         else 
         {
@@ -75,7 +79,11 @@ public class PlayerController : MonoBehaviour
         /* Menu */
         if(Input.GetKeyDown(KeyCode.Escape))
         {
+            rb.velocity = Vector2.zero;
+            rb.angularVelocity = 0;
             transform.position = new Vector3(-66, 34, -117);
+            rb.velocity = Vector2.zero;
+            rb.angularVelocity = 0;
             isGrounded = false;
             sand_Splash_C = false;
             light_Overlay1_C = false;
@@ -84,6 +92,7 @@ public class PlayerController : MonoBehaviour
         /* Checks if Character Grounded and Jumps */
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
+            spriteRenderer.sprite = Jump;
             rb.AddForce(new Vector2(0f, jumpForce), ForceMode2D.Impulse);
             isGrounded = false;
         }
@@ -98,7 +107,10 @@ public class PlayerController : MonoBehaviour
             transform.localScale = new Vector3(1, 1, 1);
         }
 
-        if(Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D)){
+        if (!isGrounded && !isGroundedNJ) {
+            spriteRenderer.sprite = Jump;
+        }
+        else if(Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D)){
             timeSinceLastSpriteChange += Time.deltaTime;
             if (timeSinceLastSpriteChange >= spriteChangeInterval)
             {
@@ -127,17 +139,21 @@ public class PlayerController : MonoBehaviour
         else{
             sandSplashObject.transform.localScale = new Vector3(0, 0, 0);
         }
-        /* Makes Light Overlay 1 Appear */
+
+        /* Makes Light Overlay 1 And Clouds Appear */
         if ( light_Overlay1_C == true){
-            lightOverlay1.transform.localScale = new Vector3(120,110, 100);
-        }
-        else{
-            lightOverlay1.transform.localScale = new Vector3(0, 0, 0);
+            lightOverlay1.transform.localScale = new Vector3(120, 110, 100);
+            idleClouds1.transform.localScale = new Vector3(1, 1, 1);
         }
 
         // Executes Beginning
         if(Input.GetKeyDown(KeyCode.E) & menu_Begin == true){
+            rb.velocity = Vector2.zero;
+            rb.angularVelocity = 0;
+            isGroundedNJ = false;
             transform.position = new Vector3(-34, -107, 3);
+            rb.velocity = Vector2.zero;
+            rb.angularVelocity = 0;
             Debug.Log("Teleporting to LV. 1");
             sand_Splash_C = true;
             light_Overlay1_C = true;
@@ -175,17 +191,20 @@ public class PlayerController : MonoBehaviour
       {
           isGrounded = true;
       }
+      if (collision.gameObject.CompareTag("Ground-NJ")){
+        isGroundedNJ = true;
+      }
 
     if (collision.gameObject.CompareTag("Bounce-Off"))
     {
-        Debug.Log("Bouncing...");
         // Calculate the bounce direction
         Vector2 bounceDirection = transform.position - collision.transform.position;
         bounceDirection = bounceDirection.normalized;
         // Apply the bounce force
-        rb.AddForce(bounceDirection * bounceForce + Vector2.down * bounceForce, ForceMode2D.Impulse);
-        Debug.Log("Bounced!");
+        rb.AddForce(bounceDirection * (bounceForce * 2 ) + Vector2.down * bounceForce, ForceMode2D.Impulse);
     }
+
+
     }
     /* Trigger Enter */
     void OnTriggerEnter2D(Collider2D other)
@@ -204,6 +223,7 @@ public class PlayerController : MonoBehaviour
           Debug.Log(menu_Quit);
       }
     }
+
     /* Trigger Exit */
     void OnTriggerExit2D(Collider2D other)
     {

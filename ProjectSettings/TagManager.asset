@@ -16,6 +16,7 @@ TagManager:
   - Sand_Splash
   - Light-Overlay1
   - Bounce-Off
+  - Idle-Clouds1
   layers:
   - Default
   - TransparentFX
