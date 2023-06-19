@@ -19,6 +19,7 @@ public class PlayerController : MonoBehaviour
     public GameObject sandSplashObject;
     public GameObject lightOverlay1;
     public GameObject idleClouds1;
+    public AudioSource audioSteps;
     public Sprite Run1; // Running Sprite 1
     public Sprite Run2; // Running Sprite 2
     public Sprite Default_Idle; // Default Sprite
@@ -31,7 +32,6 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         /* Set the player's spawn origin */
-        transform.position = new Vector3(-65.5999985f, 34.4799995f, -117.510002f);
         moveSpeed = 100f;
         maxSpeed = 40f;
         jumpForce = 90f;
@@ -112,6 +112,10 @@ public class PlayerController : MonoBehaviour
         }
         else if(Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D)){
             timeSinceLastSpriteChange += Time.deltaTime;
+            if (!audioSteps.isPlaying)
+            {
+                audioSteps.Play();
+            }
             if (timeSinceLastSpriteChange >= spriteChangeInterval)
             {
                 if (usingSprite1)
@@ -124,6 +128,7 @@ public class PlayerController : MonoBehaviour
                 }
                 usingSprite1 = !usingSprite1;
                 timeSinceLastSpriteChange = 0f;
+                audioSteps.Stop();
             }
         }
         else{
