@@ -90,11 +90,11 @@ public class PlayerController : MonoBehaviour
             Debug.Log("Teleporting to Menu");
         }
         /* Checks if Character Grounded and Jumps */
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
-        {
-            spriteRenderer.sprite = Jump;
-            rb.AddForce(new Vector2(0f, jumpForce), ForceMode2D.Impulse);
-            isGrounded = false;
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded) 
+        { 
+            spriteRenderer.sprite = Jump; 
+            rb.AddForce(new Vector2(0f, jumpForce), ForceMode2D.Impulse); 
+            isGrounded = false; 
         }
 
 
