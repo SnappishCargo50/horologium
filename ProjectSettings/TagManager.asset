@@ -17,6 +17,8 @@ TagManager:
   - Light-Overlay1
   - Bounce-Off
   - Idle-Clouds1
+  - Arena_Menu
+  - LV2
   layers:
   - Default
   - TransparentFX

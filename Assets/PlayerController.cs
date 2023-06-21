@@ -13,13 +13,17 @@ public class PlayerController : MonoBehaviour
     private bool isGroundedNJ = true;
     public bool menu_Begin = false;
     public bool menu_Quit = false;
+    public bool menu_Arena = false;
+    public bool lv_2 = false;
     public bool sand_Splash_C = false;
     public bool light_Overlay1_C = false;
     private bool usingSprite1 = true;
     public GameObject sandSplashObject;
     public GameObject lightOverlay1;
     public GameObject idleClouds1;
-    public AudioSource audioSteps;
+    public AudioSource audioObject;
+    public AudioClip jumpClip;
+    public AudioClip walkClip;
     public Sprite Run1; // Running Sprite 1
     public Sprite Run2; // Running Sprite 2
     public Sprite Default_Idle; // Default Sprite
@@ -95,6 +99,7 @@ public class PlayerController : MonoBehaviour
             spriteRenderer.sprite = Jump; 
             rb.AddForce(new Vector2(0f, jumpForce), ForceMode2D.Impulse); 
             isGrounded = false; 
+            audioObject.PlayOneShot(jumpClip);
         }
 
 
@@ -112,10 +117,6 @@ public class PlayerController : MonoBehaviour
         }
         else if(Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D)){
             timeSinceLastSpriteChange += Time.deltaTime;
-            if (!audioSteps.isPlaying)
-            {
-                audioSteps.Play();
-            }
             if (timeSinceLastSpriteChange >= spriteChangeInterval)
             {
                 if (usingSprite1)
@@ -128,7 +129,6 @@ public class PlayerController : MonoBehaviour
                 }
                 usingSprite1 = !usingSprite1;
                 timeSinceLastSpriteChange = 0f;
-                audioSteps.Stop();
             }
         }
         else{
@@ -150,6 +150,9 @@ public class PlayerController : MonoBehaviour
             lightOverlay1.transform.localScale = new Vector3(120, 110, 100);
             idleClouds1.transform.localScale = new Vector3(1, 1, 1);
         }
+        else{
+            lightOverlay1.transform.localScale = new Vector3(0, 0, 0);
+        } 
 
         // Executes Beginning
         if(Input.GetKeyDown(KeyCode.E) & menu_Begin == true){
@@ -162,6 +165,15 @@ public class PlayerController : MonoBehaviour
             Debug.Log("Teleporting to LV. 1");
             sand_Splash_C = true;
             light_Overlay1_C = true;
+        }
+
+        //Arena
+        if(Input.GetKeyDown(KeyCode.E) & menu_Arena == true){
+            transform.position = new Vector3(-956, -115, 0);
+        }
+        //LV2
+        if(lv_2 == true){
+            transform.position = new Vector3(2531, -350, 0);
         }
 
         //Exits Game
@@ -221,11 +233,23 @@ public class PlayerController : MonoBehaviour
           menu_Begin = true;
           Debug.Log(menu_Begin);
       }
+      //Arena
+      if (other.tag == "Arena_Menu")
+      {
+          menu_Arena = true;
+          Debug.Log(menu_Arena);
+      }
       //Quit
       if (other.tag == "Quit_Menu")
       {
           menu_Quit = true;
           Debug.Log(menu_Quit);
+      }
+      //LV2
+      if (other.tag == "LV2")
+      {
+        lv_2 = true;
+        Debug.Log(menu_Quit);
       }
     }
 
@@ -245,5 +269,15 @@ public class PlayerController : MonoBehaviour
             menu_Quit = false;
             Debug.Log(menu_Quit);
         }
+      //LV2
+      if (other.tag == "LV2")
+      {
+        lv_2 = false;
+      }
+    //Arena
+      if (other.tag == "Arena_Menu")
+      {
+          menu_Arena = false;
+      }
     }
 }
