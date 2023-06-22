@@ -2,7 +2,7 @@
 
 This is the Main Repository for the Horologium game.
 
-## Want to try the game when it ?
+## Want to try the game when it releases?
 
 ### FOLLOW US ON ITCH.IO:
 
