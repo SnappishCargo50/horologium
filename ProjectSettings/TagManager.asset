@@ -9,6 +9,16 @@ TagManager:
   - Friend
   - Vendor1
   - Restart
+  - Wall
+  - Begin-Menu
+  - Ground-NJ
+  - Quit_Menu
+  - Sand_Splash
+  - Light-Overlay1
+  - Bounce-Off
+  - Idle-Clouds1
+  - Arena_Menu
+  - LV2
   layers:
   - Default
   - TransparentFX
